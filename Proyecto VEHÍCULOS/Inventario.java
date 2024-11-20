@@ -120,14 +120,6 @@ public class Inventario {
         }
     }
     
-    public Vehiculo buscarPorId(String id) {
-        for (Vehiculo v : vehiculos) {
-            if (v.getNumeroIdentificacion().equals(id)) {
-                return v;
-            }
-        }
-        return null;
-    }
    
     
 }

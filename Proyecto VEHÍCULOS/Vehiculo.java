@@ -46,25 +46,28 @@ public class Vehiculo {
     }
 
 
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-    
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-    
-    public void setAnioFabricacion(int anioFabricacion) {
-        this.anioFabricacion = anioFabricacion;
-    }
-    
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-    
-
     public String mostrarInformacion() {
         return "Marca: " + marca + ", Modelo: " + modelo + ", Año: " + anioFabricacion + 
                ", ID: " + numeroIdentificacion + ", Precio: " + precio;
     }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public void setAnioFabricacion(int anioFabricacion) {
+        this.anioFabricacion = anioFabricacion;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+
+
+
 }

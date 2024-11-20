@@ -35,79 +35,79 @@ public class AgenciaGUI extends JFrame {
         JButton cargarBtn = new JButton("Cargar Inventario");
         cargarBtn.addActionListener(e -> cargarInventario());
 
-
-        JButton modificarBtn = new JButton("Modificar Vehículo");
-        modificarBtn.addActionListener(e -> modificarVehiculo());
-
-
         JPanel botonesPanel = new JPanel();
         botonesPanel.add(agregarBtn);
         botonesPanel.add(guardarBtn);
         botonesPanel.add(cargarBtn);
-        botonesPanel.add(modificarBtn);
 
         JButton eliminarBtn = new JButton("Eliminar Vehículo");
         eliminarBtn.addActionListener(e -> eliminarVehiculo());
         botonesPanel.add(eliminarBtn);
 
-        
+        JButton modificarBtn = new JButton("Modificar Vehículo");
+        modificarBtn.addActionListener(e -> modificarVehiculo());
+        botonesPanel.add(modificarBtn);
+
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(botonesPanel, BorderLayout.SOUTH);
 
         add(panel);
     }
 
-
     private void modificarVehiculo() {
-        int filaSeleccionada = tablaVehiculos.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un vehículo para modificar.");
-            return;
-        }
-    
-        String id = modeloTabla.getValueAt(filaSeleccionada, 4).toString(); // ID del vehículo
-        Vehiculo vehiculo = inventario.buscarPorId(id);
+        // Pedir al usuario el ID del vehículo a modificar
+        String id = JOptionPane.showInputDialog(this, "Ingrese el ID del vehículo a modificar:");
+        if (id == null || id.isBlank()) return; // Si el usuario cancela o no ingresa un ID
+
+        Vehiculo vehiculo = inventario.buscarVehiculo(id);
         if (vehiculo == null) {
-            JOptionPane.showMessageDialog(this, "No se encontró el vehículo seleccionado.");
+            JOptionPane.showMessageDialog(this, "No se encontró un vehículo con el ID especificado.");
             return;
         }
-    
-        // Crear un panel de edición
-        JPanel panel = new JPanel(new GridLayout(5, 2));
+
+        // Crear un panel para modificar los datos
+        JPanel panel = new JPanel(new GridLayout(6, 2));
         JTextField campoMarca = new JTextField(vehiculo.getMarca());
         JTextField campoModelo = new JTextField(vehiculo.getModelo());
         JTextField campoAnio = new JTextField(String.valueOf(vehiculo.getAnioFabricacion()));
         JTextField campoPrecio = new JTextField(String.valueOf(vehiculo.getPrecio()));
-    
+
         panel.add(new JLabel("Marca:"));
         panel.add(campoMarca);
+
         panel.add(new JLabel("Modelo:"));
         panel.add(campoModelo);
+
         panel.add(new JLabel("Año de Fabricación:"));
         panel.add(campoAnio);
+
         panel.add(new JLabel("Precio:"));
         panel.add(campoPrecio);
-    
+
         if (JOptionPane.showConfirmDialog(this, panel, "Modificar Vehículo",
                 JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
             try {
-                // Actualizar los valores del vehículo
-                vehiculo.setMarca(campoMarca.getText().trim());
-                vehiculo.setModelo(campoModelo.getText().trim());
-                vehiculo.setAnioFabricacion(Integer.parseInt(campoAnio.getText().trim()));
-                vehiculo.setPrecio(Double.parseDouble(campoPrecio.getText().trim()));
-    
-                // Actualizar la tabla
+                // Validar y actualizar datos
+                String nuevaMarca = campoMarca.getText().trim();
+                String nuevoModelo = campoModelo.getText().trim();
+                int nuevoAnio = Integer.parseInt(campoAnio.getText().trim());
+                double nuevoPrecio = Double.parseDouble(campoPrecio.getText().trim());
+
+                vehiculo.setMarca(nuevaMarca);
+                vehiculo.setModelo(nuevoModelo);
+                vehiculo.setAnioFabricacion(nuevoAnio);
+                vehiculo.setPrecio(nuevoPrecio);
+
+                // Actualizar tabla
                 actualizarTabla();
                 JOptionPane.showMessageDialog(this, "Vehículo modificado con éxito.");
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error de formato en los campos numéricos.");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al modificar vehículo: " + ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error en los campos numéricos: " + ex.getMessage());
             }
         }
     }
-    
+
+
     private void agregarVehiculo() {
         // Panel para entrada de datos
         JPanel panel = new JPanel(new GridLayout(7, 2));
@@ -185,10 +185,6 @@ public class AgenciaGUI extends JFrame {
             }
         }
     }
-    
-
-
-    
 
     private void eliminarVehiculo() {
         String id = JOptionPane.showInputDialog(this, "Ingrese el ID del vehículo a eliminar:");
